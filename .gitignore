@@ -1,0 +1,22 @@
+# dependencies
+node_modules/
+package-lock.json
+pnpm-lock.yaml
+
+# local runtime artifacts
+*.log
+comfyui-console.log
+
+# machine-local config & state (never commit)
+.env
+.secrets/
+config.json
+state/
+hub/
+
+# backups / scratch
+*.bak
+*.bak-*/
+bak/
+.sync/
+.publish/

@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "LAN Relay Auto-Wake",
+    "description": "Deliver LAN messages into a specific DSH session and wake its agent; provides lan_relay_send / lan_relay_sessions / lan_relay_status tools"
+  }
+}

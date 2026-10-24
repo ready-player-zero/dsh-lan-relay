@@ -1,0 +1,5 @@
+# dsh-lan-relay-push bundle patch
+# 作为 bundle 合入 profile 时，自动插入本插件行。插件名从 profile 的 node_modules 解析。
+- insert:
+    - id: lan-relay-push
+      name: 'dsh-lan-relay-push'

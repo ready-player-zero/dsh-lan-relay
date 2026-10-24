@@ -1,0 +1,40 @@
+{
+  "name": "dsh-lan-relay",
+  "version": "0.4.0",
+  "description": "局域网内多台 DeepSeek Harness（DSH）之间的消息总线：离线队列 + 长轮询 + MCP 工具 + 自动唤醒插件（零依赖）",
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "main": "mcp-server.mjs",
+  "scripts": {
+    "hub": "node hub.mjs",
+    "mcp": "node mcp-server.mjs",
+    "test": "node test/smoke.mjs",
+    "test:plugin": "node --test push-plugin/test/core.test.mjs",
+    "setup:hub": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/setup.ps1 -Role hub",
+    "setup:peer": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/setup.ps1 -Role peer"
+  },
+  "keywords": [
+    "deepseek-harness",
+    "dsh",
+    "dsh-plugin",
+    "lan",
+    "relay",
+    "message-bus",
+    "mcp",
+    "mcp-server",
+    "agent",
+    "wake-on-message"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ready-player-zero/dsh-lan-relay.git"
+  },
+  "homepage": "https://github.com/ready-player-zero/dsh-lan-relay#readme",
+  "bugs": {
+    "url": "https://github.com/ready-player-zero/dsh-lan-relay/issues"
+  },
+  "author": "ready-player-zero",
+  "license": "MIT"
+}
