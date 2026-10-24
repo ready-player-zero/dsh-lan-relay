@@ -11,7 +11,7 @@
  *   {
  *     "relay_url": "http://10.0.0.10:8787",
  *     "token": "...",
- *     "self": "dw1",
+ *     "self": "pc1",
  *     "push": { "enabled": true, "default_session": "", "wake": true, "poll_timeout_seconds": 25 }
  *   }
  */

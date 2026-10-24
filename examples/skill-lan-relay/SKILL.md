@@ -21,7 +21,7 @@ node "F:/work/dsh/dsh_workspace/dsh-lan-relay/relay-cli.mjs" status
 ## 2. 发消息
 
 ```bash
-node "F:/work/dsh/dsh_workspace/dsh-lan-relay/relay-cli.mjs" send --to dw2 --text "帮我看下 X，回我 Y"
+node "F:/work/dsh/dsh_workspace/dsh-lan-relay/relay-cli.mjs" send --to pc2 --text "帮我看下 X，回我 Y"
 ```
 
 - `--to` 填对方 peer 名；`--to "*"` 广播给所有其他 peer。

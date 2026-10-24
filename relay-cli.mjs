@@ -3,7 +3,7 @@
  * LAN Relay CLI —— 不开 DSH 也能收发/排障（也用于本插件自测）
  *
  *   node relay-cli.mjs status
- *   node relay-cli.mjs send --to dw2 --text "你好，帮我看下 X"
+ *   node relay-cli.mjs send --to pc2 --text "你好，帮我看下 X"
  *   node relay-cli.mjs inbox --limit 10
  *   node relay-cli.mjs wait --timeout 30
  *   node relay-cli.mjs peers

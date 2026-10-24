@@ -87,7 +87,7 @@ dsh-lan-relay/
 
 ```powershell
 cd dsh-lan-relay
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts\setup.ps1 -Role hub -Self dw1
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\setup.ps1 -Role hub -Self pc1
 ```
 
 脚本会：生成/复用 token，写 `~/.dsh/lan-relay/config.json`，自动挑一个局域网 IP 作为 `relay_url`，
@@ -154,7 +154,7 @@ Get-Content "$env:USERPROFILE\.dsh\lan-relay\hub\hub.log" -Tail 10
 
 ```powershell
 cd dsh-lan-relay
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts\setup.ps1 -Role peer -Self dw2 `
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts\setup.ps1 -Role peer -Self pc2 `
   -HubUrl http://10.0.0.10:8787 -Token <hub 机器输出的 token>
 ```
 
@@ -197,7 +197,7 @@ node relay-cli.mjs peers
 A 机器：
 
 ```powershell
-node relay-cli.mjs send --to dw2 --text "ping from dw1"
+node relay-cli.mjs send --to pc2 --text "ping from pc1"
 ```
 
 B 机器：
@@ -206,7 +206,7 @@ B 机器：
 node relay-cli.mjs wait --timeout 20
 ```
 
-能在 B 看到 `ping from dw1`，链路就通了。
+能在 B 看到 `ping from pc1`，链路就通了。
 
 ---
 
@@ -229,15 +229,15 @@ node relay-cli.mjs wait --timeout 20
 
 机器 A：
 
-> 帮我给 dw2 发消息，让它把 `logs/app.log` 最后 50 行贴回来，然后等它 60 秒。
+> 帮我给 pc2 发消息，让它把 `logs/app.log` 最后 50 行贴回来，然后等它 60 秒。
 
-Agent A：`relay_send(to="dw2", text="请把 logs/app.log 最后 50 行贴回来…")` → `relay_wait(timeout_seconds=50)` → 可能再等一轮 → 把回复转述给你。
+Agent A：`relay_send(to="pc2", text="请把 logs/app.log 最后 50 行贴回来…")` → `relay_wait(timeout_seconds=50)` → 可能再等一轮 → 把回复转述给你。
 
 机器 B（你或另一个 Agent 触发它查看）：
 
-> 看下 dw1 有没有消息。
+> 看下 pc1 有没有消息。
 
-Agent B：`relay_inbox()` → 执行 → `relay_send(to="dw1", text="<结果>")`。
+Agent B：`relay_inbox()` → 执行 → `relay_send(to="pc1", text="<结果>")`。
 
 ### 关于"拉"与"等"
 
@@ -271,7 +271,7 @@ $dsh = "<DSH_INSTALL>\resources\runtime\cli\bin\dsh.cmd"
 
 **新增 bundle 必须重启 DSH 才生效。** 重启后会话 id 不变（同一 session 日志），旧会话重新打开即恢复。
 
-> 另一台机器（dw2）同步最新版本 + 装插件的完整步骤见 **[SYNC-DW2.md](SYNC-DW2.md)**（含要复制哪些文件、分步命令、注意事项）。
+> 另一台机器（pc2）同步最新版本 + 装插件的完整步骤见 **[docs/TWO-MACHINE-SETUP.md](docs/TWO-MACHINE-SETUP.md)**（含要复制哪些文件、分步命令、注意事项）。
 
 ### 配置（`~/.dsh/lan-relay/config.json` 的 `push` 段）
 
@@ -311,7 +311,7 @@ $dsh = "<DSH_INSTALL>\resources\runtime\cli\bin\dsh.cmd"
 1. 重启 DSH（目标会话**不需要**提前打开）
 2. 另一台机器执行：
    ```powershell
-   node relay-cli.mjs send --to dw1 --to-session session-00000000-0000-0000-0000-000000000000 --text "自动唤醒测试"
+   node relay-cli.mjs send --to pc1 --to-session session-00000000-0000-0000-0000-000000000000 --text "自动唤醒测试"
    ```
 3. 目标会话应**自动开始回复**（不需要人说话）；`lan_relay_status` 里 `stats.cold` / `stats.delivered` 会递增
 4. 想确认冷启动：`stats.cold >= 1`，日志里有 `cold delivered seq=… -> session-…`

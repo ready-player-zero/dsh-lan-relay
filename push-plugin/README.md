@@ -18,7 +18,7 @@ DSH 插件（bundle）：**局域网消息自动唤醒**。
 {
   "relay_url": "http://10.0.0.10:8787",
   "token": "...",
-  "self": "dw1",
+  "self": "pc1",
   "push": {
     "enabled": true,
     "default_session": "",

@@ -74,7 +74,7 @@ const TOOLS = [
   {
     name: 'relay_send',
     description:
-      '给局域网内另一台机器上的 DSH Agent 发一条消息。to 填对方 peer 名（如 "dw1" / "b"），'
+      '给局域网内另一台机器上的 DSH Agent 发一条消息。to 填对方 peer 名（如 "pc1" / "b"），'
       + '或填 "*" 广播给所有其他 peer。to_session 可指定对方某个会话（如 session-a37a161f-...），'
       + '不填则由对方的 relay 插件投递到它配置的默认会话。消息会落盘在中继 hub 上，对方离线也会在下次上线时收到。'
       + '发送成功返回 seq，可用于引用/排障。',

@@ -79,7 +79,7 @@ function makeRuntime({ agents, stateDir, port, push = {}, toolsService = null, d
   const config = {
     relayUrl: `http://127.0.0.1:${port}`,
     token: TOKEN,
-    self: 'dw1',
+    self: 'pc1',
     stateDir,
     push: {
       enabled: push.enabled !== false,
@@ -107,14 +107,14 @@ function fakeSessionController(calls) {
 
 test('formatIncoming 带来源 peer/session 与回复提示', () => {
   const text = formatIncoming(
-    { seq: 7, from: 'dw2', from_session: 'session-aaa', text: '帮我看看日志', thread: 'ops', ts: 1700000000000 },
-    { self: 'dw1' },
+    { seq: 7, from: 'pc2', from_session: 'session-aaa', text: '帮我看看日志', thread: 'ops', ts: 1700000000000 },
+    { self: 'pc1' },
   );
-  assert.match(text, /peer="dw2"/);
+  assert.match(text, /peer="pc2"/);
   assert.match(text, /session-aaa/);
   assert.match(text, /帮我看看日志/);
-  assert.match(text, /lan_relay_send\(to="dw2", to_session="session-aaa"/);
-  assert.match(text, /本机 peer=dw1/);
+  assert.match(text, /lan_relay_send\(to="pc2", to_session="session-aaa"/);
+  assert.match(text, /本机 peer=pc1/);
 });
 
 test('selectTarget：精确命中 / 目标不在线默认不投递 / 默认会话 / require_session', () => {
@@ -178,10 +178,10 @@ test('installTools 注册 3 个工具，relay_send 自动带 from_session', asyn
   let captured = null;
   runtime.http.send = async (payload) => {
     captured = payload;
-    return { message: { seq: 3, from: 'dw1', to: payload.to, to_session: payload.toSession, ts: Date.now() } };
+    return { message: { seq: 3, from: 'pc1', to: payload.to, to_session: payload.toSession, ts: Date.now() } };
   };
   const value = await send.execute(
-    { to: 'dw2', text: 'ping', to_session: 'session-remote' },
+    { to: 'pc2', text: 'ping', to_session: 'session-remote' },
     { agent: agents[0], signal: { aborted: false, throwIfAborted() {} } },
   );
   assert.equal(value.ok, true);
@@ -196,9 +196,9 @@ test('dispatch：投递到精确会话，消息形状符合 V4（id/role/source�
   const { runtime } = makeRuntime({ agents: [target, other], stateDir: tmpDir(), port: 1 });
   await runtime.dispatch({
     seq: 1,
-    from: 'dw2',
+    from: 'pc2',
     from_session: 'session-remote',
-    to: 'dw1',
+    to: 'pc1',
     to_session: 'session-target',
     text: 'hello',
     ts: Date.now(),
@@ -225,9 +225,9 @@ test('dispatch：目标会话不在线 → 冷启动投递（sessionController.p
   });
   await runtime.dispatch({
     seq: 2,
-    from: 'dw2',
+    from: 'pc2',
     from_session: 'session-remote',
-    to: 'dw1',
+    to: 'pc1',
     to_session: 'session-d493e600-xxxx',
     text: 'ComfyUI 交接任务',
     ts: Date.now(),
@@ -249,7 +249,7 @@ test('dispatch：冷启动不可用时不误投其它会话', async () => {
     port: 1,
     push: { default_session: 'session-default' },
   });
-  await runtime.dispatch({ seq: 2, from: 'dw2', to: 'dw1', to_session: 'session-gone', text: 'x', ts: Date.now() });
+  await runtime.dispatch({ seq: 2, from: 'pc2', to: 'pc1', to_session: 'session-gone', text: 'x', ts: Date.now() });
   assert.equal(fallback.calls.length, 0);
   assert.equal(runtime.stats.skipped, 1);
   assert.match(runtime.stats.last_error, /不在线/);
@@ -265,7 +265,7 @@ test('dispatch：cold_session=drop 时不冷启动；offline_fallback=true 才�
     push: { default_session: 'session-default', offline_fallback: true, cold_session: 'drop' },
     extras: { sessionController: fakeSessionController(calls) },
   });
-  await runtime.dispatch({ seq: 2, from: 'dw2', to: 'dw1', to_session: 'session-gone', text: 'x', ts: Date.now() });
+  await runtime.dispatch({ seq: 2, from: 'pc2', to: 'pc1', to_session: 'session-gone', text: 'x', ts: Date.now() });
   assert.equal(calls.length, 0);
   assert.equal(fallback.calls.length, 1);
   assert.match(fallback.calls[0].message.content[0].text, /\[注意\]/);
@@ -279,7 +279,7 @@ test('dispatch：无 to_session 且 require_session=true 时拒收', async () =>
     port: 1,
     push: { default_session: 'session-a', require_session: true },
   });
-  await runtime.dispatch({ seq: 4, from: 'dw2', to: 'dw1', text: 'x', ts: Date.now() });
+  await runtime.dispatch({ seq: 4, from: 'pc2', to: 'pc1', text: 'x', ts: Date.now() });
   assert.equal(agent.calls.length, 0);
   assert.equal(runtime.stats.skipped, 1);
   assert.match(runtime.stats.last_error, /require_session/);
@@ -287,16 +287,16 @@ test('dispatch：无 to_session 且 require_session=true 时拒收', async () =>
 
 test('dispatch：没有活跃会话时记录失败而不抛错', async () => {
   const { runtime } = makeRuntime({ agents: [], stateDir: tmpDir(), port: 1 });
-  await runtime.dispatch({ seq: 3, from: 'dw2', to: 'dw1', text: 'x', ts: Date.now() });
+  await runtime.dispatch({ seq: 3, from: 'pc2', to: 'pc1', text: 'x', ts: Date.now() });
   assert.equal(runtime.stats.skipped, 1);
   assert.match(runtime.stats.last_error, /没有活跃会话/);
 });
 
 test('游标读写', () => {
   const dir = tmpDir();
-  assert.equal(readCursor(dir, 'dw1'), 0);
-  writeCursor(dir, 'dw1', 42);
-  assert.equal(readCursor(dir, 'dw1'), 42);
+  assert.equal(readCursor(dir, 'pc1'), 0);
+  writeCursor(dir, 'pc1', 42);
+  assert.equal(readCursor(dir, 'pc1'), 42);
 });
 
 test('端到端：真实 hub + 长轮询自动唤醒指定会话', async () => {
@@ -328,8 +328,8 @@ test('端到端：真实 hub + 长轮询自动唤醒指定会话', async () => {
     runtime.start();
     await sleep(300);
 
-    const sender = new RelayHttp({ relayUrl: `http://127.0.0.1:${port}`, token: TOKEN, self: 'dw2' });
-    await sender.send({ to: 'dw1', text: '自动唤醒测试', toSession: 'session-target', fromSession: 'session-remote' });
+    const sender = new RelayHttp({ relayUrl: `http://127.0.0.1:${port}`, token: TOKEN, self: 'pc2' });
+    await sender.send({ to: 'pc1', text: '自动唤醒测试', toSession: 'session-target', fromSession: 'session-remote' });
 
     for (let i = 0; i < 100 && target.calls.length === 0; i += 1) await sleep(100);
     assert.equal(target.calls.length, 1, `未收到消息，当前统计：${JSON.stringify(runtime.stats)}`);
