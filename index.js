@@ -37,8 +37,16 @@ import {
   hubUrls,
 } from './lib/plugin-config.mjs';
 
-const VERSION = '1.0.0';
 const PKG_DIR = path.dirname(fileURLToPath(import.meta.url));
+/** 版本号取自 package.json，避免和 npm 包版本漂移。 */
+const VERSION = (() => {
+  try {
+    const manifest = JSON.parse(fs.readFileSync(path.join(PKG_DIR, 'package.json'), 'utf8'));
+    return String(manifest.version || '0.0.0');
+  } catch {
+    return '0.0.0';
+  }
+})();
 const ROUTE_PREFIX = '/lan-relay';
 const MAX_BODY_BYTES = 64 * 1024;
 const PROBE_INTERVAL_MS = 5000;

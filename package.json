@@ -1,6 +1,6 @@
 {
   "name": "dsh-lan-relay",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "DeepSeek Harness 局域网中继插件：一台机器在 DSH 进程内做 hub，其余机器粘贴加入码即可加入；跨机器 Agent 消息互通、离线补投、自动唤醒会话，标准 DSH bundle，装完即用。",
   "type": "module",
   "main": "./index.js",
