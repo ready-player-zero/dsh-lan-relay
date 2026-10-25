@@ -1,6 +1,0 @@
-{
-  "meta": {
-    "title": "LAN Relay 自动唤醒",
-    "description": "局域网消息自动投递：收到另一台 DSH 的消息后，按 session 精确投递并唤醒该会话的 agent；提供 lan_relay_send / lan_relay_sessions / lan_relay_status 工具"
-  }
-}

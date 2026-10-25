@@ -1,0 +1,8 @@
+# dsh-lan-relay —— 标准 DSH bundle patch
+#
+# 作为 bundle 合入 profile 时自动插入插件行（Host 半）。
+# 同一包的 Web 半（设置 → 局域网中继）由 package.json 的 dsh.client 声明，
+# 无需在这里额外加行；也不需要在 profile 里手写任何配置。
+- insert:
+    - id: lan-relay
+      name: 'dsh-lan-relay'

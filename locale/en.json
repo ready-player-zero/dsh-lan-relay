@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "LAN Relay",
+    "description": "Bridge DSH agents across your LAN: an embedded relay hub, one-paste join codes, a live peer list, and wake-on-message delivery, switchable between server, client, and off in Settings."
+  }
+}

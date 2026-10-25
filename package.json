@@ -1,30 +1,62 @@
 {
   "name": "dsh-lan-relay",
-  "version": "0.4.0",
-  "description": "局域网内多台 DeepSeek Harness（DSH）之间的消息总线：离线队列 + 长轮询 + MCP 工具 + 自动唤醒插件（零依赖）",
+  "version": "1.1.0",
+  "description": "DeepSeek Harness 局域网中继插件：一台机器在 DSH 进程内做 hub，其余机器粘贴加入码即可加入；跨机器 Agent 消息互通、离线补投、自动唤醒会话，标准 DSH bundle，装完即用。",
   "type": "module",
-  "engines": {
-    "node": ">=18"
+  "main": "./index.js",
+  "exports": {
+    ".": "./index.js",
+    "./client": "./client.js",
+    "./package.json": "./package.json",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
   },
-  "main": "mcp-server.mjs",
+  "files": [
+    "index.js",
+    "client.js",
+    "lib",
+    "locale",
+    "cordis.patch.yml",
+    "icon.svg",
+    "hub.mjs",
+    "scripts/allow-firewall.ps1",
+    "examples",
+    "docs",
+    "README.md",
+    "LICENSE"
+  ],
+  "dsh": {
+    "engines": {
+      "dsh": ">=0.2.1-rc.2"
+    },
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "immediately": true
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "hub": "node hub.mjs",
-    "mcp": "node mcp-server.mjs",
-    "test": "node test/smoke.mjs",
-    "test:plugin": "node --test push-plugin/test/core.test.mjs",
-    "setup:hub": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/setup.ps1 -Role hub",
-    "setup:peer": "powershell -NoProfile -ExecutionPolicy Bypass -File scripts/setup.ps1 -Role peer"
+    "test": "node --test test/hub-core.test.mjs test/plugin.test.mjs test/client.test.mjs"
+  },
+  "engines": {
+    "node": ">=18"
   },
   "keywords": [
     "deepseek-harness",
     "dsh",
     "dsh-plugin",
+    "dsh-bundle",
     "lan",
     "relay",
     "message-bus",
-    "mcp",
-    "mcp-server",
-    "agent",
+    "multi-agent",
+    "agent-to-agent",
     "wake-on-message"
   ],
   "repository": {

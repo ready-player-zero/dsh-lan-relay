@@ -1,12 +1,24 @@
 {
-  "relay_url": "http://10.0.0.10:8787",
-  "token": "REPLACE_WITH_SHARED_TOKEN",
+  "_comment": "服务端（hub 机器）。设置页会自动写这份文件；手改时 role=server 即可，token 留空会自动生成。",
+  "role": "server",
   "self": "pc1",
+  "token": "",
+  "relay_url": "http://127.0.0.1:8787",
   "state_dir": "C:\\Users\\you\\.dsh\\lan-relay\\state",
   "request_timeout_ms": 15000,
   "hub": {
+    "enabled": true,
     "host": "0.0.0.0",
     "port": 8787,
     "data_dir": "C:\\Users\\you\\.dsh\\lan-relay\\hub"
+  },
+  "push": {
+    "enabled": true,
+    "default_session": "",
+    "wake": true,
+    "poll_timeout_seconds": 25,
+    "offline_fallback": false,
+    "require_session": false,
+    "cold_session": "prompt"
   }
 }

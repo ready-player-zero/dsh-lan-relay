@@ -1,15 +1,24 @@
 {
-  "relay_url": "http://10.0.0.10:8787",
-  "token": "REPLACE_WITH_SHARED_TOKEN",
+  "_comment": "客户端（peer 机器）。实际使用建议在设置页粘贴加入码，插件会自动填好 relay_url 与 token。",
+  "role": "client",
   "self": "pc2",
+  "relay_url": "http://192.168.0.105:8787",
+  "token": "REPLACE_WITH_SHARED_TOKEN",
   "state_dir": "C:\\Users\\you\\.dsh\\lan-relay\\state",
   "request_timeout_ms": 15000,
+  "hub": {
+    "enabled": false,
+    "host": "0.0.0.0",
+    "port": 8787,
+    "data_dir": "C:\\Users\\you\\.dsh\\lan-relay\\hub"
+  },
   "push": {
     "enabled": true,
     "default_session": "",
     "wake": true,
     "poll_timeout_seconds": 25,
     "offline_fallback": false,
-    "require_session": false
+    "require_session": false,
+    "cold_session": "prompt"
   }
 }
